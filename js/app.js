@@ -3,6 +3,7 @@ const carrito = document.querySelector('#carrito')
 const contenedorCarrito = document.querySelector('#lista-carrito tbody')
 const vaciarCarritoBtn = document.querySelector('#vaciar-carrito')
 const listaCursos = document.querySelector('#lista-cursos')
+let articulosCarrito = []
 
 cargarEventListeners()
 function cargarEventListeners() {
@@ -23,7 +24,7 @@ function agregarCurso(e) {
 
 //Lee el contenido del html al que se le dio clicj y extrae la información del curso
 function leerDatosCurso(curso) {
-  console.log(curso)
+  // console.log(curso)
 
   //Crear un objeto con el contenido del curso actual
   const inforCurso = {
@@ -34,6 +35,48 @@ function leerDatosCurso(curso) {
     cantidad: 1
   }
 
-  console.log(inforCurso)
+  //Agrega elementos al arreglo de carrito
+  articulosCarrito = [...articulosCarrito, inforCurso]
+
+  console.log(articulosCarrito)
+
+  carritoHTML()
 }
 
+//Muestra el carrito de compras en el HTML
+function carritoHTML() {
+
+  //Limpiar el html
+  limpiarHTML()
+
+  //Recorre el carrito y genera el html
+  articulosCarrito.forEach(curso => {
+    const {imagen, titulo, precio, cantidad, id} = curso
+    console.log(curso)
+    const row = document.createElement('tr')
+    row.innerHTML = `
+      <td>
+        <img srC="${imagen}" width="100">
+      </td>
+      <td>${titulo}</td>
+      <td>${precio}</td>
+      <td>${cantidad}</td>
+      <td>
+        <a href="#" class="borrar-curso" data-id="${id}">X</a>
+      </td>
+    `
+
+    //Agrega el html del carrito en el tbody
+    contenedorCarrito.appendChild(row)
+  })
+}
+
+//ELimina los cursos del table body
+function limpiarHTML() {
+  //Forma lenta
+  // contenedorCarrito.innerHTML = ''
+
+  while(contenedorCarrito.firstChild) {
+    contenedorCarrito.removeChild(contenedorCarrito.firstChild)
+  }
+}
